@@ -73,5 +73,7 @@ A,i3-gaps,"is the default window manager"
 A,firefox,"is the main web browser."
 A,python-pywal,"generates a theme from the wallpaper"
 ,thermald,"is a good thermal daemon"
-A,mullvad-vpn,"is a good VPN service"
+# there's a chance this might not work, I'd rather do it manually
+# A,mullvad-vpn,"is a good VPN service"
 A,discord,"is le epic gaming voice chat service"
+A,minecraft-launcher,"you know what this is B)"
