@@ -41,10 +41,11 @@ beginning of the script or giving the script one of these options:
 LARBS will parse the given programs list and install all given programs. Note
 that the programs file must be a three column `.csv`.
 
-The first column is a "tag" that determines how the program is installed, ""
-(blank) for the main repository, `A` for via the AUR or `G` if the program is a
-git repository that is meant to be `make && sudo make install`ed. `V`if it's for
-the void linux distribution's xbps package manager.
+The first column is a "tag" that determines how the program is installed:
+ - ` ` (Nothing) will use pacman to install the package. You can check if the package is available by running `pacman -Qs <package-name>`
+ - `A` will use yay by default, to install the package from the AUR
+ - `G` will manually install the git repository with `make && sudo make install`
+ - `P` will `pipinstall` the package 
 
 The second column is the name of the program in the repository, or the link to
 the git repository, and the third comment is a description (should be a verb
