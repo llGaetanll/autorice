@@ -65,10 +65,12 @@ several basic sudo commands without a password (`shutdown`, `reboot`,
 `pacman -Syu`).
 
 ### TODO
-- add polybar to list of installs
-- add one wallpaper in local cache when first loading
-- add fontconfig
-- install font required by powerlevel10k
-- add poewrlevel10k profile
-- install zsh git repos on init
-- `ttf-apple-emoji` not loaded
+- [X] add polybar to list of installs
+- [X] add one wallpaper in local cache when first loading
+- [X] add fontconfig
+- [X] install font required by powerlevel10k
+- [ ] add powerlevel10k profile
+- [X] install zsh git repos on init
+- [X] autoconfig neovim
+- [ ] `ttf-apple-emoji` not loaded
+- [X] add Japanese font support
