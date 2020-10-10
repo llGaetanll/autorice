@@ -67,7 +67,7 @@ A,mutt-wizard-git,"is a light-weight terminal-based email setup system."
 # My additions
 ,ttf-roboto,"adds Roboto fonts."
 ,ttf-fira-mono,"adds Fira Mono fonts."
-,otf-ipafont,"is a nice Japanese font."
+# ,otf-ipafont,"is a nice Japanese font."
 A,ttf-apple-emoji,"adds Apple emojis."
 A,zsh-theme-powerlevel10k-git, "is the zoomer shell prompt"
 # A,ttf-meslo-nerd-font-powerlevel10k, "is the powerlevel10k font"
