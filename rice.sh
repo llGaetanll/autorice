@@ -21,7 +21,7 @@ esac done
 
 ### FUNCTIONS ###
 
-installpkg(){ pacman --noconfirm --needed -S "$1" >/dev/null 2>&1 ;}
+installpkg(){ pacman --noconfirm --needed -S "$1" >/dev/null 2> err.log ;}
 
 error() { clear; printf "ERROR:\\n%s\\n" "$1"; exit;}
 
@@ -94,19 +94,19 @@ gitmakeinstall() {
 	dialog --title "Autoricing" --infobox "Installing \`$progname\` ($n of $total) via \`git\` and \`make\`. $(basename "$1") $2" 5 70
 	sudo -u "$name" git clone --depth 1 "$1" "$dir" >/dev/null 2>&1 || { cd "$dir" || return ; sudo -u "$name" git pull --force origin master;}
 	cd "$dir" || exit
-	make >/dev/null 2>&1
-	make install >/dev/null 2>&1
+	make >/dev/null 2> err.log
+	make install >/dev/null 2> err.log
 	cd /tmp || return ;}
 
 aurinstall() { \
 	dialog --title "Autoricing" --infobox "Installing \`$1\` ($n of $total) from the AUR. $1 $2" 5 70
 	echo "$aurinstalled" | grep -q "^$1$" && return
-	sudo -u "$name" $aurhelper -S --noconfirm "$1" >/dev/null 2>&1
+	sudo -u "$name" $aurhelper -S --noconfirm "$1" >/dev/null 2> err.log
 	}
 
 pipinstall() { \
 	dialog --title "Autoricing" --infobox "Installing the Python package \`$1\` ($n of $total). $1 $2" 5 70
-	command -v pip || installpkg python-pip >/dev/null 2>&1
+	command -v pip || installpkg python-pip >/dev/null 2> err.log
 	yes | pip install "$1"
 	}
 
