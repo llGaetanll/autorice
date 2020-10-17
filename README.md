@@ -7,7 +7,7 @@ On an Arch based distribution as root, run the following:
 
 ```
 curl -LO almela.io/rice.sh
-sh larbs.sh
+sh rice.sh
 ```
 
 ## Customization
