@@ -228,6 +228,9 @@ git update-index --assume-unchanged "/home/$name/.config/xinitrc"
 # system-dependent polybar parameters
 git update-index --assume-unchanged "/home/$name/.config/polybar/modules.ini"
 
+# make git ignore the user changing the wallpaper
+git update-index --assume-unchanged "/home/$name/.local/share/bg"
+
 # Most important command! Get rid of the beep!
 systembeepoff
 
