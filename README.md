@@ -6,7 +6,7 @@ This repository installs my dotfiles on a fresh install of any arch-based distri
 On an Arch based distribution as root, run the following:
 
 ```
-curl -LO almela.io/rice.sh
+curl -LO https://raw.githubusercontent.com/llGaetanll/autorice/master/rice.sh
 sh rice.sh
 ```
 
