@@ -1,5 +1,6 @@
 # As opposed to removing programs outright, I simply comment them out so i can easliy get them 
 # back later in case I mess up. All of my additions are at the bottom
+
 #TAG,NAME IN REPO (or git url),PURPOSE (should be a verb phrase to sound right while installing)
 ,xorg-server,"is the graphical server."
 ,xorg-xwininfo,"allows querying information about windows."
@@ -81,4 +82,5 @@ A,python-pywal,"generates a theme from the wallpaper"
 ,thermald,"is a good thermal daemon"
 A,discord,"is le epic gaming voice chat service"
 A,mon2cam-git,"is a program to make discord screenshare work on linux"
-A,minecraft-launcher,"you know what this is B)"
+A,minecraft-launcher,"allows you to play minecraft!!!"
+A,smenu,"is a minimalist TUI builder used by certain scripts"
