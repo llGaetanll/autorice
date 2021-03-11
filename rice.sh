@@ -215,9 +215,18 @@ yes | sudo -u "$name" $aurhelper -S libxft-bgra-git >/dev/null 2>&1
 # Install the dotfiles in the user's home directory
 putgitrepo "$dotfilesrepo" "/home/$name" "$repobranch"
 rm -f "/home/$name/README.md" "/home/$name/LICENSE" "/home/$name/FUNDING.yml"
-# make git ignore deleted LICENSE & README.md files
+
+### Files ignored by git ###
 git update-index --assume-unchanged "/home/$name/README.md"
-git update-index --assume-unchanged "/home/$name/LICENSE"
+# wallpaper symlink
+git update-index --assume-unchanged "/home/$name/.local/share/bg" 
+
+# ignored so the user can set their own DPI
+git update-index --assume-unchanged "/home/$name/.config/Xresources" 
+# ignored so the user can set system-dependent environment variables
+git update-index --assume-unchanged "/home/$name/.config/xinitrc"
+# system-dependent polybar parameters
+git update-index --assume-unchanged "/home/$name/.config/polybar/modules.ini"
 
 # Most important command! Get rid of the beep!
 systembeepoff
