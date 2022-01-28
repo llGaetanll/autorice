@@ -11,11 +11,11 @@ This is the part where I mention that I cannot take responsibility for any damag
 done to your system by this config. Although I genuinely use these config files
 for my main system, I cannot guarantee a smooth ride for everyone.
 
-Things are going to break and _you_ are going to have to fix them. But while I
+Things _are_ going to break and _you_ are going to have to fix them. But while I
 know the ins and outs of this system after having spent a year building
 it, _you_ do not. To this effect, I tried documenting as much of this repo as I
 could but you cannot get around the fact that you _will_ need to put in the work
-to familiarize yourself with this repo.
+to familiarize yourself with the repo.
 
 If this still does not deter you, I've included a section of [Helpful Resources](#helpful-resources) that guided me when I first got into the world of linux and ricing.
 
@@ -92,7 +92,7 @@ several basic sudo commands without a password (`shutdown`, `reboot`,
   - polybar-start
 - install rust natively with `rustc` (with curl)
   - bspwmrc sources colors.sh which doesn't exist
-- add default wallpaper
+- ~~add default wallpaper~~ exists at `.local/share/default.png`
 - on install, first wallpaper should be set with pywal to initialize `colors.sh`
   - used by bspwm and dmenu (dm) 
 - install system fonts (list of which in fontconfig)
