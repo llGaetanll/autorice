@@ -86,6 +86,10 @@ effectively with the `newperms` function. At the end of installation,
 several basic sudo commands without a password (`shutdown`, `reboot`,
 `pacman -Syu`).
 
+## TODO
+- remove all symlinks starting with `/home/al`
+- install rust natively with `rustc`
+
 ## Helpful Resources
 
 - [The Arch Wiki](https://wiki.archlinux.org/)
