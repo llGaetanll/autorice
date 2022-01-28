@@ -91,11 +91,14 @@ several basic sudo commands without a password (`shutdown`, `reboot`,
   - xinitrc
   - polybar-start
 - install rust natively with `rustc` (with curl)
-- add `picom-git` to list of dependencies
-- add `pywal` to list of dependencies
   - bspwmrc sources colors.sh which doesn't exist
 - add default wallpaper
-- on install, first wallpaper should be set with pywal to init `color.sh`
+- on install, first wallpaper should be set with pywal to initialize `colors.sh`
+  - used by bspwm and dmenu (dm) 
+- install system fonts (list of which in fontconfig)
+- fix dpi on larger screens?
+  - this won't fix st though
+- pics of built-in polybars
 
 ## Helpful Resources
 
