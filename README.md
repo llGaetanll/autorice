@@ -99,6 +99,8 @@ several basic sudo commands without a password (`shutdown`, `reboot`,
 - fix dpi on larger screens?
   - this won't fix st though
 - pics of built-in polybars
+- download my st programs instead of luke smith's
+- enable screen brightness script to work from launch (need to change some permissions)
 
 ## Helpful Resources
 
