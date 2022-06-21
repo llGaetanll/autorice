@@ -87,6 +87,7 @@ several basic sudo commands without a password (`shutdown`, `reboot`,
 `pacman -Syu`).
 
 ## TODO
+- on Artix, keys should be refreshed using `artix-keyring` instead of `archlinux-keyring` package
 - remove all symlinks starting with `/home/al`
   - xinitrc
   - polybar-start
