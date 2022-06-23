@@ -45,6 +45,8 @@ You can run the script with any of these options to modify what gets installed:
 
 ### The Program list
 
+> As opposed to removing programs outright [from LARBS], I simply comment them out so i can easliy get them back later in case I mess up. All of my additions are at the bottom
+
 This script will parse the given programs list and install all given programs. Note
 that the programs file must be a three column `.csv`. You can add comments starting with `#`.
 

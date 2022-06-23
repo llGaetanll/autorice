@@ -1,6 +1,3 @@
-# As opposed to removing programs outright, I simply comment them out so i can easliy get them 
-# back later in case I mess up. All of my additions are at the bottom
-
 #TAG,NAME IN REPO (or git url),PURPOSE (should be a verb phrase to sound right while installing)
 ,xorg-server,"is the graphical server."
 ,xorg-xwininfo,"allows querying information about windows."
@@ -63,7 +60,6 @@ G,https://github.com/lukesmithxyz/dwm.git,"is a stack-based window manager."
 A,mutt-wizard-git,"is a light-weight terminal-based email setup system."
 ,slock,"allows you to lock your computer, and quickly unlock with your password."
 
-# My additions
 ,ttf-roboto,"adds Roboto fonts."
 ,ttf-fira-mono,"adds Fira Mono fonts."
 A,nerd-fonts-roboto-mono,"adds Roboto Mono font used in Polybar."
