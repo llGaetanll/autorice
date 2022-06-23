@@ -90,17 +90,15 @@ several basic sudo commands without a password (`shutdown`, `reboot`,
 
 ## TODO
 - on Artix, keys should be refreshed using `artix-keyring` instead of `archlinux-keyring` package
-- remove all symlinks starting with `/home/al`
-  - xinitrc
-  - polybar-start
+- [x] remove all symlinks starting with `/home/al`
+  - [x] xinitrc
+  - [x] polybar-start
 - install rust natively with `rustc` (with curl)
-  - bspwmrc sources colors.sh which doesn't exist
 - ~~add default wallpaper~~ exists at `.local/share/default.png`
 - on install, first wallpaper should be set with pywal to initialize `colors.sh`
-  - used by bspwm and dmenu (dm) 
+  - used by bspwm and dmenu (`dm`) 
+    - bspwmrc sources colors.sh which doesn't exist
 - install system fonts (list of which in fontconfig)
-- fix dpi on larger screens?
-  - this won't fix st though
 - pics of built-in polybars
 - download my st programs instead of luke smith's
 - enable screen brightness script to work from launch (need to change some permissions)
