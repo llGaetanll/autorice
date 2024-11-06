@@ -1,0 +1,135 @@
+package	description
+acpilight	a backward-compatible xbacklight replacement based on ACPI
+adobe-source-han-sans-jp-fonts	Adobe Source Han Sans Subset OTF - Japanese OpenType/CFF fonts
+alacritty	A cross-platform, GPU-accelerated terminal emulator
+alsa-firmware	Firmware binaries for loader programs in alsa-tools and hotplug firmware loader
+alsa-utils	Advanced Linux Sound Architecture - Utilities
+arandr	Provide a simple visual front end for XRandR 1.2.
+archlinux-keyring	Arch Linux PGP keyring
+base	Minimal package set to define a basic Artix Linux installation
+base-devel	Basic tools to build Artix Linux packages
+bluetuith-bin	A TUI based bluetooth manager
+bluez-runit	runit service scripts for bluez
+bluez-utils	Development and debugging utilities for the bluetooth protocol stack
+bpytop	Resource monitor that shows usage and stats for processor, memory, disks, network and processes
+bspwm	Tiling window manager based on binary space partitioning
+chrony	Lightweight NTP client and server
+chrony-runit	Runit service script for chrony
+cowsay	Configurable talking cow (and a bit more)
+discord	All-in-one voice and text chat for gamers
+docker	Pack, ship and run any application as a lightweight container
+dosfstools	DOS filesystem utilities
+dunst	Customizable and lightweight notification-daemon
+efibootmgr	Linux user-space application to modify the EFI Boot Manager
+elogind-runit	runit service scripts for elogind
+exfat-utils	Utilities for exFAT file system
+ffmpeg	Complete solution to record, convert and stream audio and video
+firefox	Fast, Private & Safe Web Browser
+fwupd	Simple daemon to allow session software to update firmware
+geckodriver	Proxy for using W3C WebDriver-compatible clients to interact with Gecko-based browsers.
+git	the fast distributed version control system
+gnome-keyring	Stores passwords and encryption keys
+grub	GNU GRand Unified Bootloader (2)
+intel-ucode	Microcode update files for Intel CPUs
+jq	Command-line JSON processor
+kmon	Linux kernel manager and activity monitor
+lf-git	lf is a terminal file manager written in Go
+libxkbcommon-x11	Keyboard handling library using XKB data for X11 XCB clients
+linux	The Linux kernel and modules
+linux-firmware	Firmware files for Linux
+linux-headers	Headers and scripts for building modules for the Linux kernel
+lua	Powerful lightweight programming language designed for extending applications
+maim	Utility to take a screenshot using imlib2
+man-db	A utility for reading man pages
+minecraft-launcher	Official Minecraft Launcher
+mpv	a free, open source, and cross-platform media player
+nasm	80x86 assembler designed for portability and modularity
+neovim	Fork of Vim aiming to improve user experience, plugins, and GUIs
+networkmanager	Network connection manager and user applications
+networkmanager-runit	runit service scripts for networkmanager
+nftables	Netfilter tables userspace tools
+noto-fonts-emoji	Google Noto emoji fonts
+npm	JavaScript package manager
+ocaml	A functional language with OO extensions
+onetbb	High level abstract threading library (oneAPI Threading Building Blocks)
+opam	OCaml package manager
+openresolv	resolv.conf management framework (resolvconf)
+os-prober	Utility to detect other OSes on a set of drives
+pandoc-bin	Pandoc - executable only, without 750MB Haskell depends/makedepends
+paru	Feature packed AUR helper
+pastel	A command-line tool to generate, analyze, convert and manipulate colors
+picom	Lightweight compositor for X11
+polybar	A fast and easy-to-use status bar
+postgresql-runit	Runit service scripts for postgresql
+prettier	An opinionated code formatter
+prettierd	prettier, as a daemon, for ludicrous formatting speed.
+pulseaudio-alsa	ALSA Configuration for PulseAudio
+pulseaudio-bluetooth	Bluetooth support for PulseAudio
+pulsemixer	CLI and curses mixer for pulseaudio
+racket-minimal	Minimal Racket installation, without DrRacket/docs
+ripgrep	A search tool that combines the usability of ag with the raw speed of grep
+rsync	A fast and versatile file copying tool for remote and local files
+runit	a cross-platform Unix init scheme with service supervision
+rust-src	Source code for the Rust standard library
+rustup	The Rust toolchain installer
+sc-im	A spreadsheet program based on SC
+signal-desktop	Signal Private Messenger for Linux
+sof-firmware	Sound Open Firmware
+stylua	Code formatter for Lua
+sxhkd	Simple X hotkey daemon
+sxiv-git	Simple (or small or suckless) X Image Viewer
+tcpdump	Powerful command-line packet analyzer
+texlive-basic	TeX Live - Essential programs and files
+texlive-bibtexextra	TeX Live - BibTeX additional styles
+texlive-binextra	TeX Live - TeX auxiliary programs
+texlive-fontsextra	TeX Live - Additional fonts
+texlive-formatsextra	TeX Live - Additional formats
+texlive-games	TeX Live - Games typesetting
+texlive-humanities	TeX Live - Humanities packages
+texlive-latexextra	TeX Live - LaTeX additional packages
+texlive-latexindent-meta	Meta package to use latexindent
+texlive-mathscience	TeX Live - Mathematics, natural sciences, computer science packages
+texlive-music	TeX Live - Music packages
+texlive-pictures	TeX Live - Graphics, pictures, diagrams
+texlive-pstricks	TeX Live - PSTricks
+texlive-publishers	TeX Live - Publisher styles, theses, etc.
+thermald	The Linux Thermal Daemon program from 01.org
+tmux	Terminal multiplexer
+transmission-cli	Fast, easy, and free BitTorrent client (CLI tools, daemon and web client)
+transmission-runit	runit service scripts for transmission
+trash-cli	Command line trashcan (recycle bin) interface
+tremc	Curses interface for transmission - python3 fork of transmission-remote-cli
+ttf-fira-mono	Mozilla's monospace typeface designed for Firefox OS
+ttf-fork-awesome	Fork of the iconic Font Awesome font and CSS toolkit
+ttf-hack	A hand groomed and optically balanced typeface based on Bitstream Vera Mono.
+ttf-nerd-fonts-symbols	High number of extra glyphs from popular 'iconic fonts'
+ttf-roboto	Google's signature family of fonts
+ttf-victor-mono	Unoffical Victor Mono(TTF) AUR package
+udisks2	Daemon, tools and libraries to access and manipulate disks, storage devices and technologies
+unclutter	A small program for hiding the mouse cursor
+unrar	The RAR uncompression program
+unzip	For extracting and viewing files in .zip archives
+usbutils	A collection of USB tools to query connected USB devices
+vi	The original ex/vi text editor
+vim	Vi Improved, a highly configurable, improved version of the vi text editor
+vscodium-bin	Binary releases of VS Code without MS branding/telemetry/licensing.
+wabt	The WebAssembly Binary Toolkit is a suite of tools for WebAssembly
+wget	Network utility to retrieve files from the Web
+wireguard-tools	next generation secure network tunnel - tools for configuration
+xclip	Command line interface to the X11 clipboard
+xdg-utils	Command line tools that assist applications with a variety of desktop integration tasks
+xdotool	Command-line X11 automation tool
+xorg-server	Xorg X server
+xorg-xdpyinfo	Display information utility for X
+xorg-xinit	X.Org initialisation program
+xorg-xprop	Property displayer for X
+xorg-xrandr	Primitive command line interface to RandR extension
+xorg-xset	User preference utility for X
+xorg-xwininfo	Command-line utility to print information about windows on an X server
+xwallpaper	Wallpaper setting utility for X
+yt-dlp	A youtube-dl fork with additional features and fixes
+zathura	Minimalistic document viewer
+zathura-pdf-mupdf	PDF support for Zathura (MuPDF backend) (Supports PDF, ePub, and OpenXPS)
+zig	a general-purpose programming language and toolchain for maintaining robust, optimal, and reusable software
+zip	Compressor/archiver for creating and modifying zipfiles
+zsh	A very advanced and programmable command interpreter (shell) for UNIX

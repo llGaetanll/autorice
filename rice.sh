@@ -1,252 +1,228 @@
 #!/bin/sh
-# Luke's Auto Rice Boostrapping Script (LARBS)
-# by Luke Smith <luke@lukesmith.xyz>
-# License: GNU GPLv3
 
-### OPTIONS AND VARIABLES ###
+DOTFILES="https://github.com/llGaetanll/rice.git"
+BRANCH="master"
 
-while getopts ":a:r:b:p:h" o; do case "${o}" in
-	h) printf "Optional arguments for custom use:\\n  -r: Dotfiles repository (local file or url)\\n  -p: Dependencies and programs csv (local file or url)\\n  -a: AUR helper (must have pacman-like syntax)\\n  -h: Show this message\\n" && exit ;;
-	r) dotfilesrepo=${OPTARG} && git ls-remote "$dotfilesrepo" || exit ;;
-	b) repobranch=${OPTARG} ;;
-	p) progsfile=${OPTARG} ;;
-	a) aurhelper=${OPTARG} ;;
-	*) printf "Invalid option: -%s\\n" "$OPTARG" && exit ;;
-esac done
+PROGS="https://raw.githubusercontent.com/llGaetanll/autorice/master/progs.csv"
 
-[ -z "$dotfilesrepo" ] && dotfilesrepo="https://github.com/llGaetanll/rice.git"
-[ -z "$progsfile" ] && progsfile="https://raw.githubusercontent.com/llGaetanll/autorice/master/progs.csv"
-[ -z "$aurhelper" ] && aurhelper="yay"
-[ -z "$repobranch" ] && repobranch="master"
+# The max number of parallel downloads to set pacman/paru to
+NUM_PARALLEL=10
 
-### FUNCTIONS ###
+# A small list of programs that need to be installed before the mass install,
+# just to make sure everything runs smoothly
+PRE_REQUISITES="archlinux-keyring
+artix-keyring
+curl
+base-devel
+git
+chrony
+chrony-runit
+zsh"
 
-installpkg(){ pacman --noconfirm --needed -S "$1" >/dev/null 2> err.log ;}
+# Files that git should ignore in its index after installing the dotfiles
+GIT_INDEX_IGNORE="README.md
+.local/share/bg
+.config/Xresources
+.config/xinitrc
+.config/polybar/modules.ini
+"
 
-error() { clear; printf "ERROR:\\n%s\\n" "$1"; exit;}
+get_user_and_passwd() {
+  echo -n "Enter username: "
+  read name
 
-welcomemsg() { \
-	dialog --title "Welcome!" --msgbox "Welcome to Gaetan's modded LARBS Script!\\n\\nThis script will automatically install my fully-featured Linux setup.\\n\\n-Gaetan" 10 60
+  echo -n "Enter password: "
+  read -s pass1
+  echo
 
-	dialog --colors --title "Important Note!" --yes-label "All ready!" --no-label "Return..." --yesno "Be sure the computer you are using has current pacman updates and refreshed Arch keyrings.\\n\\nIf it does not, the installation of some programs might fail." 8 70
-	}
+  echo -n "Confirm password: "
+  read -s pass2
+  echo
 
-getuserandpass() { \
-	# Prompts user for new username an password.
-	name=$(dialog --inputbox "First, please enter a name for the user account." 10 60 3>&1 1>&2 2>&3 3>&1) || exit
-	while ! echo "$name" | grep -q "^[a-z_][a-z0-9_-]*$"; do
-		name=$(dialog --no-cancel --inputbox "Username not valid. Give a username beginning with a letter, with only lowercase letters, - or _." 10 60 3>&1 1>&2 2>&3 3>&1)
-	done
-	pass1=$(dialog --no-cancel --passwordbox "Enter a password for that user." 10 60 3>&1 1>&2 2>&3 3>&1)
-	pass2=$(dialog --no-cancel --passwordbox "Retype password." 10 60 3>&1 1>&2 2>&3 3>&1)
-	while ! [ "$pass1" = "$pass2" ]; do
+  while ! [ "$pass1" = "$pass2" ]; do
 		unset pass2
-		pass1=$(dialog --no-cancel --passwordbox "Passwords do not match.\\n\\nEnter password again." 10 60 3>&1 1>&2 2>&3 3>&1)
-		pass2=$(dialog --no-cancel --passwordbox "Retype password." 10 60 3>&1 1>&2 2>&3 3>&1)
-	done ;}
+    echo "Passwords don't match, try again"
 
-usercheck() { \
-	! (id -u "$name" >/dev/null) 2>&1 ||
-	dialog --colors --title "WARNING!" --yes-label "CONTINUE" --no-label "No wait..." --yesno "The user \`$name\` already exists on this system. LARBS can install for a user already existing, but it will \\Zboverwrite\\Zn any conflicting settings/dotfiles on the user account.\\n\\nLARBS will \\Zbnot\\Zn overwrite your user files, documents, videos, etc., so don't worry about that, but only click <CONTINUE> if you don't mind your settings being overwritten.\\n\\nNote also that LARBS will change $name's password to the one you just gave." 14 70
-	}
+    echo -n "Enter password: "
+    read -s pass1
+    echo
 
-preinstallmsg() { \
-	dialog --title "Let's get this party started!" --yes-label "Let's go!" --no-label "No, nevermind!" --yesno "The rest of the installation will now be totally automated, so you can sit back and relax.\\n\\nIt will take some time, but when done, you can relax even more with your complete system.\\n\\nNow just press <Let's go!> and the system will begin installation!" 13 60 || { clear; exit; }
-	}
+    echo -n "Confirm password: "
+    read -s pass2
+    echo
+	done ;
+}
 
-adduserandpass() { \
-	# Adds user `$name` with password $pass1.
-	dialog --infobox "Adding user \"$name\"..." 4 50
-	useradd -m -g wheel -s /bin/zsh "$name" >/dev/null 2>&1 ||
-	usermod -a -G wheel "$name" && mkdir -p /home/"$name" && chown "$name":wheel /home/"$name"
-	repodir="/home/$name/.local/src"; mkdir -p "$repodir"; chown -R "$name":wheel "$(dirname "$repodir")"
-	echo "$name:$pass1" | chpasswd
-	unset pass1 pass2 ;}
+# Determines whether username $name exists or not
+user_dne() {
+  (! (id -u "$name" &>/dev/null)) || { echo "User \"$name\" already exists!"; return 1; }
+}
 
-refreshkeys() { \
-	dialog --infobox "Refreshing Arch Keyring..." 4 40
-	pacman --noconfirm -Sy archlinux-keyring >/dev/null 2>&1
-	}
+# Add a user and password to the system, add it to the wheel group, and create
+# its home directory
+set_user_and_passwd() {
+  # this function must be ran as root
+  [ "$EUID" = 0 ] || { echo "You must be root to set a new user and password!"; return 1; }
 
-newperms() { # Set special sudoers settings for install (or after).
-	sed -i "/#LARBS/d" /etc/sudoers
-	echo "$* #LARBS" >> /etc/sudoers ;}
+  # Add a new user with a home directory and set their shell to zsh
+  useradd -m -s /bin/zsh "$name" &>/dev/null
 
-manualinstall() { # Installs $1 manually if not installed. Used only for AUR helper here.
-	[ -f "/usr/bin/$1" ] || (
-	dialog --infobox "Installing \"$1\", an AUR helper..." 4 50
-	cd /tmp || exit
-	rm -rf /tmp/"$1"*
-	curl -sO https://aur.archlinux.org/cgit/aur.git/snapshot/"$1".tar.gz &&
-	sudo -u "$name" tar -xvf "$1".tar.gz >/dev/null 2>&1 &&
-	cd "$1" &&
-	sudo -u "$name" makepkg --noconfirm -si >/dev/null 2>&1
-	cd /tmp || return) ;}
+  # Add the user to the wheel group for sudo access
+  usermod -aG wheel "$name"
 
-maininstall() { # Installs all needed programs from main repo.
-	dialog --title "Autoricing" --infobox "Installing \`$1\` ($n of $total). $1 $2" 5 70
-	installpkg "$1"
-	}
+  # Ensure the home directory has the correct ownership
+  mkdir -p /home/"$name"
+  chown "$name":wheel /home/"$name"
 
-gitmakeinstall() {
-	progname="$(basename "$1" .git)"
-	dir="$repodir/$progname"
-	dialog --title "Autoricing" --infobox "Installing \`$progname\` ($n of $total) via \`git\` and \`make\`. $(basename "$1") $2" 5 70
-	sudo -u "$name" git clone --depth 1 "$1" "$dir" >/dev/null 2>&1 || { cd "$dir" || return ; sudo -u "$name" git pull --force origin master;}
-	cd "$dir" || exit
-	make >/dev/null 2> err.log
-	make install >/dev/null 2> err.log
-	cd /tmp || return ;}
+  echo "$name:$pass1" | chpasswd
+  unset pass1 pass2 ;
+}
 
-aurinstall() { \
-	dialog --title "Autoricing" --infobox "Installing \`$1\` ($n of $total) from the AUR. $1 $2" 5 70
-	echo "$aurinstalled" | grep -q "^$1$" && return
-	sudo -u "$name" $aurhelper -S --noconfirm "$1" >/dev/null 2> err.log
-	}
+sync_time() {
+  echo "Syncing system time"
+  
+  # Enable and start chronyd using runit
+  ln -sf /etc/runit/sv/chronyd /run/runit/service
 
-pipinstall() { \
-	dialog --title "Autoricing" --infobox "Installing the Python package \`$1\` ($n of $total). $1 $2" 5 70
-	command -v pip || installpkg python-pip >/dev/null 2> err.log
-	yes | pip install "$1"
-	}
+  # Wait for chronyd to start and verify that it's running
+  sleep 2
+  if pgrep chronyd >/dev/null; then
+    chronyc -a 'burst 4/4' && chronyc -a makestep
+  else
+    echo "Failed to start chronyd; time synchronization skipped."
+  fi
+}
 
-installationloop() { \
-	([ -f "$progsfile" ] && cp "$progsfile" /tmp/progs.csv) || curl -Ls "$progsfile" | sed "s/\s*#.*//g; /^$/ d" > /tmp/progs.csv
-	total=$(wc -l < /tmp/progs.csv)
-	aurinstalled=$(pacman -Qqm)
-	while IFS=, read -r tag program comment; do
-		n=$((n+1))
-		echo "$comment" | grep -q "^\".*\"$" && comment="$(echo "$comment" | sed "s/\(^\"\|\"$\)//g")"
-		case "$tag" in
-			"A") aurinstall "$program" "$comment" ;;
-			"G") gitmakeinstall "$program" "$comment" ;;
-			"P") pipinstall "$program" "$comment" ;;
-			*) maininstall "$program" "$comment" ;;
-		esac
-	done < /tmp/progs.csv ;}
+upd_pacman_conf() {
+  echo "Updating pacman config"
 
-putgitrepo() { # Downloads a gitrepo $1 and places the files in $2 only overwriting conflicts
-	dialog --infobox "Downloading and installing config files..." 4 60
-	[ -z "$3" ] && branch="master" || branch="$repobranch"
+  # Enable colored output
+  grep -q "^Color" /etc/pacman.conf || sed -i "s/^#Color$/Color/" /etc/pacman.conf
+
+  # Turn on whimsical pacman progress bar
+  grep -q "ILoveCandy" /etc/pacman.conf || sed -i "/#VerbosePkgLists/a ILoveCandy" /etc/pacman.conf
+
+  # Set parallel downloads
+  if grep -q "^ParallelDownloads" /etc/pacman.conf; then
+    sed -i "s/^ParallelDownloads.*/ParallelDownloads = $NUM_PARALLEL/" /etc/pacman.conf
+  else
+    sed -i "/ILoveCandy/a ParallelDownloads = $NUM_PARALLEL" /etc/pacman.conf
+  fi
+}
+
+install_paru() {
+	[ -f "/usr/bin/paru" ] || (
+    echo "Installing paru"
+
+    cd /tmp || exit
+    rm -rf "/tmp/paru*"
+
+    sudo -u "$name" pacman -S --needed base-devel
+    git clone https://aur.archlinux.org/paru.git
+    cd paru &&
+    sudo -u "$name" makepkg --noconfirm -si &>/dev/null
+
+    cd /tmp || return
+  );
+}
+
+install_prereqs() {
+  echo "Installing prereq programs"
+
+  pre_requisites_list=$(echo "$PRE_REQUISITES" | tr '\n' ' ')
+
+  # For prereqs, we don't yet have paru installed
+  pacman --noconfirm --needed -S "$pre_requisites_list"
+}
+
+# The main install routine
+install_progs() {
+  curl -Ls "$PROGS" > "/tmp/progs.tsv"
+
+  # Extract only the programs names, and space separate them
+  progs="$(awk 'NR > 1 { printf "%s ", $1 }' /tmp/progs.tsv)"
+
+  # Install the programs in parallel
+  paru --noconfirm --needed -S "$progs" 2> err.log ;
+}
+
+install_dotfiles() {
+  # $1 is the destination directory
+
+  echo "Installing dotfiles"
+
+  # We make a temporary directory and clone the repo there
+  # Then, we copy it to the actual directory
 	dir=$(mktemp -d)
-	[ ! -d "$2" ] && mkdir -p "$2"
-	chown -R "$name":wheel "$dir" "$2"
-	sudo -u "$name" git clone --recursive -b "$branch" --depth 1 "$1" "$dir" >/dev/null 2>&1
-	sudo -u "$name" cp -rfT "$dir" "$2"
-	}
+	[ ! -d "$1" ] && mkdir -p "$1"
 
-setupzsh(){
-	mkdir $XDG_CONFIG_HOME/zsh/plugins
+	chown -R "$name":wheel "$dir" "$1"
+	sudo -u "$name" git clone --recursive -b "$BRANCH" --depth 1 "$DOTFILES" "$dir" &>/dev/null
 
-	# install zsh-fast-syntax highlighing
-	git clone https://github.com/zdharma/fast-syntax-highlighting $XDG_CONFIG_HOME/zsh/plugins/fast-syntax-highlighting
-	}
+  # All the files in GIT_INDEX_IGNORE should be ignored by git's index
+  git_index_ignore_lst=$(echo "$GIT_INDEX_IGNORE" | tr '\n' ' ' | sed "s/[^ ]*/$dir\/&/g")
 
-systembeepoff() { dialog --infobox "Getting rid of that retarded error beep sound..." 10 50
-	rmmod pcspkr
-	echo "blacklist pcspkr" > /etc/modprobe.d/nobeep.conf ;}
+  (cd "$dir" && git update-index --assume-unchanged "$git_index_ignore_lst" && cd -)
 
-finalize(){ \
-	dialog --infobox "Preparing welcome message..." 4 50
-	dialog --title "All done!" --msgbox "Congrats! Provided there were no hidden errors, the script completed successfully and all the programs and configuration files should be in place.\\n\\nTo run the new graphical environment, log out and log back in as your new user, then run the command \"startx\" to start the graphical environment (it will start automatically in tty1).\\n\\n.t Luke" 12 80
-	}
+	sudo -u "$name" cp -rfT "$dir" "$1"
+}
 
-### THE ACTUAL SCRIPT ###
+remove_beep() {
+  if lsmod | grep -q pcspkr; then
+    rmmod pcspkr
+  fi
+  echo "blacklist pcspkr" > /etc/modprobe.d/nobeep.conf ;
+}
 
-### This is how everything happens in an intuitive format and order.
+setup_zsh() {
+  echo "Setting up zsh"
 
-# Check if user is root on Arch distro. Install dialog.
-installpkg dialog || error "Are you sure you're running this as the root user, are on an Arch-based distribution and have an internet connection?"
+  # Make zsh the default shell for the user.
+  chsh -s /bin/zsh "$name" >/dev/null 2>&1
+  sudo -u "$name" mkdir -p "/home/$name/.cache/zsh/"
+}
 
-# Welcome user and pick dotfiles.
-welcomemsg || error "User exited."
+gen_dbus_uuid() {
+  # dbus UUID must be generated for Artix runit.
+  dbus-uuidgen > /var/lib/dbus/machine-id || echo "Failed to generate dbus UUID"
+}
 
-# Get and verify username and password.
-getuserandpass || error "User exited."
+restart_pulseaudio() {
+  echo "Restarting pulseaudio"
 
-# Give warning if user already exists.
-usercheck || error "User exited."
+  # Start/Restart PulseAudio.
+  killall pulseaudio; sudo -u "$name" pulseaudio --start
+}
 
-# Last chance for user to back out before install.
-preinstallmsg || error "User exited."
+#
+# ===== The actual script starts here =====
+#
 
-### The rest of the script requires no user input.
+get_user_and_passwd && user_dne && set_user_and_passwd || { echo "Failed adding new user. Exiting"; return 1; }
 
-# Refresh Arch keyrings.
-refreshkeys || error "Error automatically refreshing Arch keyring. Consider doing so manually."
+upd_pacman_conf
 
-for x in curl base-devel git ntp zsh; do
-	dialog --title "Autoricing" --infobox "Installing \`x\` which is required to install and configure other programs." 5 70
-	installpkg "$x"
-done
+install_prereqs || { echo "Failed to install pre-requisite packages. Exiting"; return 1; }
 
-dialog --title "Autoricing" --infobox "Synchronizing system time to ensure successful and secure installation of software..." 4 70
-ntpdate 0.us.pool.ntp.org >/dev/null 2>&1
+[ -f /etc/sudoers.pacnew ] && cp /etc/sudoers.pacnew /etc/sudoers
 
-adduserandpass || error "Error adding username and/or password."
-
-[ -f /etc/sudoers.pacnew ] && cp /etc/sudoers.pacnew /etc/sudoers # Just in case
-
-# Allow user to run sudo without password. Since AUR programs must be installed
-# in a fakeroot environment, this is required for all builds with AUR.
-newperms "%wheel ALL=(ALL) NOPASSWD: ALL"
-
-# Make pacman and yay colorful and adds eye candy on the progress bar because why not.
-grep -q "^Color" /etc/pacman.conf || sed -i "s/^#Color$/Color/" /etc/pacman.conf
-grep -q "ILoveCandy" /etc/pacman.conf || sed -i "/#VerbosePkgLists/a ILoveCandy" /etc/pacman.conf
+sync_time
 
 # Use all cores for compilation.
 sed -i "s/-j2/-j$(nproc)/;s/^#MAKEFLAGS/MAKEFLAGS/" /etc/makepkg.conf
 
-manualinstall $aurhelper || error "Failed to install AUR helper."
+install_paru || { echo "Failed to install paru. Exiting"; return 1; }
 
-# The command that does all the installing. Reads the progs.csv file and
-# installs each needed program the way required. Be sure to run this only after
-# the user has been created and has priviledges to run sudo without a password
-# and all build dependencies are installed.
-installationloop
+install_progs
 
-dialog --title "Autoricing" --infobox "Configuring zsh..." 5 70
-setupzsh
+install_dotfiles "/home/$name"
 
-dialog --title "Autoricing" --infobox "Finally, installing \`libxft-bgra\` to enable color emoji in suckless software without crashes." 5 70
-yes | sudo -u "$name" $aurhelper -S libxft-bgra-git >/dev/null 2>&1
+remove_beep
 
-# Install the dotfiles in the user's home directory
-putgitrepo "$dotfilesrepo" "/home/$name" "$repobranch"
-rm -f "/home/$name/README.md" "/home/$name/LICENSE" "/home/$name/FUNDING.yml"
+setup_zsh
 
-### Files ignored by git ###
-git update-index --assume-unchanged "/home/$name/README.md"
-# wallpaper symlink
-git update-index --assume-unchanged "/home/$name/.local/share/bg" 
+gen_dbus_uuid
 
-# ignored so the user can set their own DPI
-git update-index --assume-unchanged "/home/$name/.config/Xresources" 
-# ignored so the user can set system-dependent environment variables
-git update-index --assume-unchanged "/home/$name/.config/xinitrc"
-# system-dependent polybar parameters
-git update-index --assume-unchanged "/home/$name/.config/polybar/modules.ini"
+restart_pulseaudio
 
-
-# Most important command! Get rid of the beep!
-systembeepoff
-
-# Make zsh the default shell for the user.
-chsh -s /bin/zsh "$name" >/dev/null 2>&1
-sudo -u "$name" mkdir -p "/home/$name/.cache/zsh/"
-
-# dbus UUID must be generated for Artix runit.
-dbus-uuidgen > /var/lib/dbus/machine-id
-
-# Start/restart PulseAudio.
-killall pulseaudio; sudo -u "$name" pulseaudio --start
-
-# This line, overwriting the `newperms` command above will allow the user to run
-# serveral important commands, `shutdown`, `reboot`, updating, etc. without a password.
-newperms "%wheel ALL=(ALL) ALL #LARBS
-%wheel ALL=(ALL) NOPASSWD: /usr/bin/shutdown,/usr/bin/reboot,/usr/bin/systemctl suspend,/usr/bin/wifi-menu,/usr/bin/mount,/usr/bin/umount,/usr/bin/pacman -Syu,/usr/bin/pacman -Syyu,/usr/bin/packer -Syu,/usr/bin/packer -Syyu,/usr/bin/systemctl restart NetworkManager,/usr/bin/rc-service NetworkManager restart,/usr/bin/pacman -Syyu --noconfirm,/usr/bin/loadkeys,/usr/bin/yay,/usr/bin/pacman -Syyuw --noconfirm"
-
-# Last message! Install complete!
-finalize
-clear
+echo "Install complete!"
