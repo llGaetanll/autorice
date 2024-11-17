@@ -99,17 +99,49 @@ sync_time() {
 upd_pacman_conf() {
   echo "Updating pacman config"
 
+  local pacman_conf_home="/etc/pacman.conf"
+
   # Enable colored output
-  grep -q "^Color" /etc/pacman.conf || sed -i "s/^#Color$/Color/" /etc/pacman.conf
+  grep -q "^Color" "$pacman_conf_home" || sed -i "s/^#Color$/Color/" /etc/pacman.conf
 
   # Turn on whimsical pacman progress bar
-  grep -q "ILoveCandy" /etc/pacman.conf || sed -i "/#VerbosePkgLists/a ILoveCandy" /etc/pacman.conf
+  grep -q "ILoveCandy" "$pacman_conf_home" || sed -i "/#VerbosePkgLists/a ILoveCandy" /etc/pacman.conf
 
   # Set parallel downloads
-  if grep -q "^ParallelDownloads" /etc/pacman.conf; then
+  if grep -q "^ParallelDownloads" "$pacman_conf_home"; then
     sed -i "s/^ParallelDownloads.*/ParallelDownloads = $NUM_PARALLEL/" /etc/pacman.conf
   else
     sed -i "/ILoveCandy/a ParallelDownloads = $NUM_PARALLEL" /etc/pacman.conf
+  fi
+
+  # Generate arch mirrorlist
+  curl -Lo "/etc/pacman.d/mirrorlist-arch" "https://archlinux.org/mirrorlist/?country=US&protocol=https&ip_version=4&ip_version=6"
+
+  # Add arch repos to pacman.conf
+  local arch_repos=$(cat <<EOF
+# Arch
+[extra]
+Include = /etc/pacman.d/mirrorlist-arch
+
+[community]
+Include = /etc/pacman.d/mirrorlist-arch
+
+[multilib]
+Include = /etc/pacman.d/mirrorlist-arch
+
+[universe]
+Server = https://universe.artixlinux.org/$arch
+Server = https://mirror1.artixlinux.org/universe/$arch
+Server = https://mirror.pascalpuffke.de/artix-universe/$arch
+Server = https://artixlinux.qontinuum.space/artixlinux/universe/os/$arch
+Server = https://mirror1.cl.netactuate.com/artix/universe/$arch
+Server = https://ftp.crifo.org/artix-universe/$arch
+Server = https://artix.sakamoto.pl/universe/$arch
+EOF
+)
+
+  if ! grep -q "^# Arch" "$pacman_conf_home"; then
+    echo "$arch_repos" >> "$pacman_conf_home"
   fi
 }
 
