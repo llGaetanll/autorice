@@ -117,7 +117,10 @@ install_paru() {
 	[ -f "/usr/bin/paru" ] || (
     echo "Installing paru"
 
-    sudo pacman -S --needed base-devel
+    sudo pacman -S --needed base-devel rustup
+
+    # Cargo is needed to build paru
+    sudo -u "$name" rustup default stable
 
     local dir
 	  dir=$(mktemp -d)
