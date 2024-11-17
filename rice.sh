@@ -92,7 +92,7 @@ sync_time() {
   sleep 2
 
   if pgrep chronyd >/dev/null; then
-    chronyc -a 'burst 4/4' && chronyc -a makestep >/dev/null 2> err.log
+    chronyc -a 'burst 4/4' >/dev/null 2> err.log && chronyc -a makestep >/dev/null 2> err.log
   else
     echo "Failed to start chronyd; time synchronization skipped."
   fi
