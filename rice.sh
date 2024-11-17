@@ -229,7 +229,7 @@ install_dotfiles() {
   # All the files in GIT_INDEX_IGNORE should be ignored by git's index
   local git_index_ignore_lst=$(echo -n "$GIT_INDEX_IGNORE" | tr '\n' ' ')
 
-  (cd "$dir" && git update-index --assume-unchanged $git_index_ignore_lst && cd -)
+  (cd "$dir" && sudo -u "$name" git update-index --assume-unchanged $git_index_ignore_lst && cd -)
 
 	sudo -u "$name" cp -rfT "$dir" "$1"
 }
