@@ -119,6 +119,7 @@ upd_pacman_conf() {
 
   # Add arch repos to pacman.conf
   local arch_repos=$(cat <<'EOF'
+
 # Arch
 [extra]
 Include = /etc/pacman.d/mirrorlist-arch
