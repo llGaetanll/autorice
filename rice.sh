@@ -115,7 +115,7 @@ upd_pacman_conf() {
   fi
 
   # Generate arch mirrorlist
-  curl -Lo "/etc/pacman.d/mirrorlist-arch" "https://archlinux.org/mirrorlist/?country=US&protocol=https&ip_version=4&ip_version=6"
+  curl -Lo "/etc/pacman.d/mirrorlist-arch" "https://archlinux.org/mirrorlist/?country=US&protocol=https&ip_version=4&ip_version=6" &>/dev/null
 
   # Remove the leading comment on Server lines
   sed -i '/^#Server = /s/^#//g' "/etc/pacman.d/mirrorlist-arch"
@@ -149,7 +149,7 @@ EOF
   fi
 
   # Sync databases
-  pacman -Sy
+  pacman -Sy >/dev/null 2> err.log
 }
 
 install_paru() {
