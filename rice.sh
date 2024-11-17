@@ -1,7 +1,7 @@
 #!/bin/sh
 
 DOTFILES="https://github.com/llGaetanll/rice.git"
-BRANCH="master"
+BRANCH="rewrite"
 
 PROGS="https://raw.githubusercontent.com/llGaetanll/autorice/refs/heads/rewrite/progs.tsv"
 
