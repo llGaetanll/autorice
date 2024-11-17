@@ -125,6 +125,9 @@ install_paru() {
     local dir
 	  dir=$(mktemp -d)
 
+    # "$name" needs to be in sudoers group to download paru
+    sudo adduser "$name" sudo
+
     chown -R "$name":wheel "$dir"
     cd "$dir" || exit
 
