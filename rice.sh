@@ -83,14 +83,16 @@ sync_time() {
   # Enable and start chronyd using runit
   ln -sf /etc/runit/sv/chronyd /run/runit/service
 
-  sleep 1 
-
-  chronyd
+  # Start the chrony daemon
+  if pgrep chronyd >/dev/null; then
+    chronyd
+  fi
 
   # Wait for chronyd to start and verify that it's running
   sleep 2
+
   if pgrep chronyd >/dev/null; then
-    chronyc -a 'burst 4/4' && chronyc -a makestep
+    chronyc -a 'burst 4/4' && chronyc -a makestep >/dev/null 2> err.log
   else
     echo "Failed to start chronyd; time synchronization skipped."
   fi
