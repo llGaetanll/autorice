@@ -147,6 +147,9 @@ EOF
   if ! grep -q "^# Arch" "$pacman_conf_home"; then
     echo "$arch_repos" >> "$pacman_conf_home"
   fi
+
+  # Sync databases
+  pacman -Sy
 }
 
 install_paru() {
