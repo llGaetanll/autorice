@@ -197,6 +197,8 @@ install_prereqs() {
 
 # The main install routine
 install_progs() {
+  echo "Installing system programs"
+
   curl -Ls "$PROGS" > "/tmp/progs.tsv"
 
   # Extract only the programs names, and space separate them
