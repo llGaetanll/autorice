@@ -219,7 +219,12 @@ install_dotfiles() {
 	[ ! -d "$1" ] && mkdir -p "$1"
 
 	chown -R "$name":wheel "$dir" "$1"
+
+  # Before we can clone the repo, we need to set and unset the current directory
+  # as safe otherwise git complains
+	sudo -u "$name" git config --global --add safe.directory "$dir"
 	sudo -u "$name" git clone --recursive -b "$BRANCH" --depth 1 "$DOTFILES" "$dir" &>/dev/null
+	sudo -u "$name" git config --global --unset safe.directory 
 
   # All the files in GIT_INDEX_IGNORE should be ignored by git's index
   local git_index_ignore_lst=$(echo -n "$GIT_INDEX_IGNORE" | tr '\n' ' ')
