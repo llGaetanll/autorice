@@ -271,4 +271,4 @@ remove_beep
 
 setup_zsh
 
-echo "Install complete!"
+echo "Install complete. Check for any silent errors in err.log"
