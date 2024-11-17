@@ -275,7 +275,7 @@ install_paru || { echo "Failed to install paru. Exiting"; return 1; }
 
 install_progs
 
-# install_dotfiles "/home/$name"
+install_dotfiles "/home/$name"
 
 # remove_beep
 
