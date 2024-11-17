@@ -118,7 +118,7 @@ upd_pacman_conf() {
   curl -Lo "/etc/pacman.d/mirrorlist-arch" "https://archlinux.org/mirrorlist/?country=US&protocol=https&ip_version=4&ip_version=6"
 
   # Add arch repos to pacman.conf
-  local arch_repos=$(cat <<EOF
+  local arch_repos=$(cat <<'EOF'
 # Arch
 [extra]
 Include = /etc/pacman.d/mirrorlist-arch
