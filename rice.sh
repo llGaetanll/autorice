@@ -24,8 +24,7 @@ GIT_INDEX_IGNORE="README.md
 .local/share/bg
 .config/Xresources
 .config/xinitrc
-.config/polybar/modules.ini
-"
+.config/polybar/modules.ini"
 
 get_user_and_passwd() {
   echo -n "Enter username: "
@@ -160,7 +159,7 @@ install_dotfiles() {
 	sudo -u "$name" git clone --recursive -b "$BRANCH" --depth 1 "$DOTFILES" "$dir" &>/dev/null
 
   # All the files in GIT_INDEX_IGNORE should be ignored by git's index
-  git_index_ignore_lst=$(echo "$GIT_INDEX_IGNORE" | tr '\n' ' ' | sed "s/[^ ]*/$dir\/&/g")
+  git_index_ignore_lst=$(echo -n "$GIT_INDEX_IGNORE" | tr '\n' ' ' | sed "s|[^ ]*|$dir/&|g")
 
   (cd "$dir" && git update-index --assume-unchanged "$git_index_ignore_lst" && cd -)
 
