@@ -85,7 +85,7 @@ sync_time() {
 
   # Start the chrony daemon
   if pgrep chronyd >/dev/null; then
-    chronyd
+    chronyd >/dev/null 2> err.log
   fi
 
   # Wait for chronyd to start and verify that it's running
