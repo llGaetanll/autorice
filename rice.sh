@@ -146,7 +146,9 @@ EOF
 }
 
 install_paru() {
-	[ -f "/usr/bin/paru" ] || (
+  [ -f "/usr/bin/paru" ] && (
+    echo "paru already installed, skipping..."
+  ) || (
     echo "Installing paru"
 
     sudo pacman -S --needed base-devel rustup
