@@ -252,7 +252,7 @@ get_user_and_passwd && user_dne && set_user_and_passwd || { echo "Failed adding 
 
 upd_pacman_conf
 
-install_prereqs || { echo "Failed to install pre-requisite packages. Exiting"; }
+install_prereqs || { echo "Failed to install pre-requisite packages. Exiting"; return; }
 
 [ -f /etc/sudoers.pacnew ] && cp /etc/sudoers.pacnew /etc/sudoers
 
@@ -261,7 +261,7 @@ sync_time
 # Use all cores for compilation.
 sed -i "s/-j2/-j$(nproc)/;s/^#MAKEFLAGS/MAKEFLAGS/" /etc/makepkg.conf
 
-install_paru || { echo "Failed to install paru. Exiting"; }
+install_paru || { echo "Failed to install paru. Exiting"; return; }
 
 install_progs
 
