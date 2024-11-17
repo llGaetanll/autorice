@@ -244,11 +244,6 @@ setup_zsh() {
   sudo -u "$name" mkdir -p "/home/$name/.cache/zsh/"
 }
 
-gen_dbus_uuid() {
-  # dbus UUID must be generated for Artix runit.
-  dbus-uuidgen > /var/lib/dbus/machine-id || echo "Failed to generate dbus UUID"
-}
-
 restart_pulseaudio() {
   echo "Restarting pulseaudio"
 
@@ -282,8 +277,6 @@ install_dotfiles "/home/$name"
 remove_beep
 
 setup_zsh
-
-gen_dbus_uuid
 
 restart_pulseaudio
 
