@@ -113,11 +113,15 @@ install_paru() {
 	[ -f "/usr/bin/paru" ] || (
     echo "Installing paru"
 
-    cd /tmp || exit
-    rm -rf /tmp/paru*
+    sudo pacman -S --needed base-devel
 
-    sudo -u "$name" pacman -S --needed base-devel
-    git clone https://aur.archlinux.org/paru.git
+    local dir
+	  dir=$(mktemp -d)
+
+    chown -R "$name":wheel "$dir"
+    cd "$dir" || exit
+
+    sudo -u "$name" git clone https://aur.archlinux.org/paru.git
     cd paru &&
     sudo -u "$name" makepkg --noconfirm -si &>/dev/null
 
