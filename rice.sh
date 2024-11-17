@@ -6,7 +6,7 @@ BRANCH="rewrite"
 PROGS="https://raw.githubusercontent.com/llGaetanll/autorice/refs/heads/rewrite/progs.tsv"
 
 # The max number of parallel downloads to set pacman/paru to
-NUM_PARALLEL=10
+NUM_PARALLEL=20
 
 # A small list of programs that need to be installed before the mass install,
 # just to make sure everything runs smoothly
