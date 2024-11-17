@@ -132,7 +132,7 @@ install_prereqs() {
   pre_requisites_list=$(echo "$PRE_REQUISITES" | tr '\n' ' ')
 
   # For prereqs, we don't yet have paru installed
-  pacman --noconfirm --needed -S "$pre_requisites_list"
+  pacman --noconfirm --needed -S $pre_requisites_list
 }
 
 # The main install routine
@@ -143,7 +143,7 @@ install_progs() {
   progs="$(awk 'NR > 1 { printf "%s ", $1 }' /tmp/progs.tsv)"
 
   # Install the programs in parallel
-  paru --noconfirm --needed -S "$progs" 2> err.log ;
+  paru --noconfirm --needed -S $progs 2> err.log ;
 }
 
 install_dotfiles() {
