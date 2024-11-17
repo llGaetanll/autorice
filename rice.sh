@@ -125,8 +125,8 @@ install_paru() {
     local dir
 	  dir=$(mktemp -d)
 
-    # "$name" needs to be in sudoers group to download paru
-    sudo adduser "$name" sudo
+    # Add "$name" to sudoers file
+    echo "$name  ALL=(ALL:ALL) ALL" >> /etc/sudoers
 
     chown -R "$name":wheel "$dir"
     cd "$dir" || exit
@@ -134,6 +134,9 @@ install_paru() {
     sudo -u "$name" git clone https://aur.archlinux.org/paru.git
     cd paru &&
     sudo -u "$name" makepkg --noconfirm -si &>/dev/null
+
+    # Remove "$name" from sudoers file
+    sed -i "/^$name ALL=(ALL:ALL) ALL$/d" /etc/sudoers
 
     cd /tmp || return
   );
