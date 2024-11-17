@@ -222,7 +222,7 @@ install_dotfiles() {
 	sudo -u "$name" git clone --recursive -b "$BRANCH" --depth 1 "$DOTFILES" "$dir" &>/dev/null
 
   # All the files in GIT_INDEX_IGNORE should be ignored by git's index
-  local git_index_ignore_lst=$(echo -n "$GIT_INDEX_IGNORE" | tr '\n' ' ' | sed "s|[^ ]*|$dir/&|g")
+  local git_index_ignore_lst=$(echo -n "$GIT_INDEX_IGNORE" | tr '\n' ' ')
 
   (cd "$dir" && git update-index --assume-unchanged "$git_index_ignore_lst" && cd -)
 
