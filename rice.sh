@@ -122,23 +122,24 @@ install_paru() {
     # Cargo is needed to build paru
     sudo -u "$name" rustup default stable
 
-    local dir
-	  dir=$(mktemp -d)
+    local paru_home="/tmp/paru"
 
-    # Add "$name" to sudoers file
+    # Remove any existing paru installation
+    rm -rf "$paru_home"
+
+    sudo -u "$name" git clone https://aur.archlinux.org/paru.git "$paru_home"
+
+    chown -R "$name":wheel "$paru_home"
+
+    # Add "$name" to sudoers file, we need this to build paru
     echo "$name  ALL=(ALL:ALL) ALL" >> /etc/sudoers
 
-    chown -R "$name":wheel "$dir"
-    cd "$dir" || exit
-
-    sudo -u "$name" git clone https://aur.archlinux.org/paru.git
-    cd paru &&
-    sudo -u "$name" makepkg --noconfirm -si &>/dev/null
+    cd "$paru_home" && sudo -u "$name" makepkg --noconfirm -si
 
     # Remove "$name" from sudoers file
     sed -i "/^$name ALL=(ALL:ALL) ALL$/d" /etc/sudoers
 
-    cd /tmp || return
+    cd - || return
   );
 }
 
