@@ -117,6 +117,9 @@ upd_pacman_conf() {
   # Generate arch mirrorlist
   curl -Lo "/etc/pacman.d/mirrorlist-arch" "https://archlinux.org/mirrorlist/?country=US&protocol=https&ip_version=4&ip_version=6"
 
+  # Remove the leading comment on Server lines
+  sed -i '/^#Server = /s/^#//g' "/etc/pacman.d/mirrorlist-arch"
+
   # Add arch repos to pacman.conf
   local arch_repos=$(cat <<'EOF'
 
