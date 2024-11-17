@@ -225,7 +225,13 @@ install_dotfiles() {
   local git_index_ignore_lst=$(echo -n "$GIT_INDEX_IGNORE" | tr '\n' ' ')
 
   cd "$dir" || exit
+
   sudo -u "$name" git update-index --assume-unchanged $git_index_ignore_lst
+
+  # install.sh in the base rice repo is only useful when
+  # git cloning the repo manually, it's of no use here
+  [ -f "install.sh" ] && rm "install.sh"
+
   cd - >/dev/null
 
 	sudo -u "$name" cp -rfT "$dir" "$1"
