@@ -244,13 +244,6 @@ setup_zsh() {
   sudo -u "$name" mkdir -p "/home/$name/.cache/zsh/"
 }
 
-restart_pulseaudio() {
-  echo "Restarting pulseaudio"
-
-  # Start/Restart PulseAudio.
-  killall pulseaudio; sudo -u "$name" pulseaudio --start
-}
-
 #
 # ===== The actual script starts here =====
 #
@@ -277,7 +270,5 @@ install_dotfiles "/home/$name"
 remove_beep
 
 setup_zsh
-
-restart_pulseaudio
 
 echo "Install complete!"
