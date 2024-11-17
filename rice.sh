@@ -83,6 +83,10 @@ sync_time() {
   # Enable and start chronyd using runit
   ln -sf /etc/runit/sv/chronyd /run/runit/service
 
+  sleep 1 
+
+  chronyd
+
   # Wait for chronyd to start and verify that it's running
   sleep 2
   if pgrep chronyd >/dev/null; then
