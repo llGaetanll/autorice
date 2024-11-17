@@ -102,16 +102,16 @@ upd_pacman_conf() {
   local pacman_conf_home="/etc/pacman.conf"
 
   # Enable colored output
-  grep -q "^Color" "$pacman_conf_home" || sed -i "s/^#Color$/Color/" /etc/pacman.conf
+  grep -q "^Color" "$pacman_conf_home" || sed -i "s/^#Color$/Color/" "$pacman_conf_home"
 
   # Turn on whimsical pacman progress bar
-  grep -q "ILoveCandy" "$pacman_conf_home" || sed -i "/#VerbosePkgLists/a ILoveCandy" /etc/pacman.conf
+  grep -q "ILoveCandy" "$pacman_conf_home" || sed -i "/#VerbosePkgLists/a ILoveCandy" "$pacman_conf_home"
 
   # Set parallel downloads
   if grep -q "^ParallelDownloads" "$pacman_conf_home"; then
-    sed -i "s/^ParallelDownloads.*/ParallelDownloads = $NUM_PARALLEL/" /etc/pacman.conf
+    sed -i "s/^ParallelDownloads.*/ParallelDownloads = $NUM_PARALLEL/" "$pacman_conf_home"
   else
-    sed -i "/ILoveCandy/a ParallelDownloads = $NUM_PARALLEL" /etc/pacman.conf
+    sed -i "/ILoveCandy/a ParallelDownloads = $NUM_PARALLEL" "$pacman_conf_home"
   fi
 
   # Generate arch mirrorlist
