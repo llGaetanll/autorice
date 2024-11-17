@@ -114,7 +114,7 @@ install_paru() {
     echo "Installing paru"
 
     cd /tmp || exit
-    rm -rf "/tmp/paru*"
+    rm -rf /tmp/paru*
 
     sudo -u "$name" pacman -S --needed base-devel
     git clone https://aur.archlinux.org/paru.git
