@@ -232,14 +232,14 @@ install_paru || { echo "Failed to install paru. Exiting"; return 1; }
 
 install_progs
 
-install_dotfiles "/home/$name"
+# install_dotfiles "/home/$name"
 
-remove_beep
+# remove_beep
 
-setup_zsh
+# setup_zsh
 
-gen_dbus_uuid
+# gen_dbus_uuid
 
-restart_pulseaudio
+# restart_pulseaudio
 
-echo "Install complete!"
+# echo "Install complete!"
