@@ -192,7 +192,7 @@ install_prereqs() {
   pre_requisites_list=$(echo "$PRE_REQUISITES" | tr '\n' ' ')
 
   # For prereqs, we don't yet have paru installed
-  pacman --noconfirm --needed -S $pre_requisites_list
+  pacman --noconfirm --needed -S $pre_requisites_list >/dev/null 2> err.log
 }
 
 # The main install routine
