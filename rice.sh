@@ -261,7 +261,7 @@ restart_pulseaudio() {
 # ===== The actual script starts here =====
 #
 
-get_user_and_passwd && user_dne && set_user_and_passwd || { echo "Failed adding new user. Exiting"; return }
+get_user_and_passwd && user_dne && set_user_and_passwd || { echo "Failed adding new user. Exiting"; return; }
 
 upd_pacman_conf
 
