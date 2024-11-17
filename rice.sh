@@ -258,11 +258,11 @@ restart_pulseaudio() {
 # ===== The actual script starts here =====
 #
 
-get_user_and_passwd && user_dne && set_user_and_passwd || { echo "Failed adding new user. Exiting"; return 1; }
+get_user_and_passwd && user_dne && set_user_and_passwd || { echo "Failed adding new user. Exiting"; }
 
 upd_pacman_conf
 
-install_prereqs || { echo "Failed to install pre-requisite packages. Exiting"; return 1; }
+install_prereqs || { echo "Failed to install pre-requisite packages. Exiting"; }
 
 [ -f /etc/sudoers.pacnew ] && cp /etc/sudoers.pacnew /etc/sudoers
 
@@ -271,7 +271,7 @@ sync_time
 # Use all cores for compilation.
 sed -i "s/-j2/-j$(nproc)/;s/^#MAKEFLAGS/MAKEFLAGS/" /etc/makepkg.conf
 
-install_paru || { echo "Failed to install paru. Exiting"; return 1; }
+install_paru || { echo "Failed to install paru. Exiting"; }
 
 install_progs
 
