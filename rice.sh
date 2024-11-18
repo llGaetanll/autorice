@@ -39,7 +39,7 @@ handle_user_and_passwd() {
     case "${answer:-N}" in
       [Yy]*)
         echo "Removing user $name"
-        userdel -r "$name"
+        userdel -r "$name" &>/dev/null
         ;;
       *)
         echo "Aborting"
