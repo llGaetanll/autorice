@@ -263,6 +263,10 @@ setup_zsh() {
 # ===== The actual script starts here =====
 #
 
+echo "-=-=-=-=-=-=-=-=-=-=-=-=-=-=-"
+echo "Gaetan's Artix Install Script"
+echo "=-=-=-=-=-=-=-=-=-=-=-=-=-=-="
+
 # This script must be ran as root
 [ "$EUID" = 0 ] || { echo "You must be root to run this script"; return; }
 
@@ -289,4 +293,5 @@ remove_beep
 
 setup_zsh
 
-echo "Install complete. Check for any silent errors in err.log"
+echo "Install complete."
+echo "As long as there weren't any horrible silent errors in err.log, you should be good to go!"
