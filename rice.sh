@@ -25,15 +25,34 @@ GIT_INDEX_IGNORE="README.md
 .config/xinitrc
 .config/polybar/modules.ini"
 
-get_user_and_passwd() {
+handle_user_and_passwd() {
   echo -n "Enter username: "
   read name
 
-  echo -n "Enter password: "
+  # Check if the user exists
+  if id -u "$name" &>/dev/null; then
+    echo "User $name already exists!"
+    echo "This script can install the dotfiles for that user, but all their data would be wiped."
+    read -p "Is this ok? [y/N]: " answer
+
+    # Default to 'N' if no input is provided
+    case "${answer:-N}" in
+      [Yy]*)
+        echo "Removing user $name"
+        userdel -r "$name"
+        ;;
+      *)
+        echo "Aborting"
+        return
+        ;;
+    esac
+  fi
+
+  echo -n "Enter new password for $name: "
   read -s pass1
   echo
 
-  echo -n "Confirm password: "
+  echo -n "Confirm new password: "
   read -s pass2
   echo
 
@@ -41,26 +60,14 @@ get_user_and_passwd() {
 		unset pass2
     echo "Passwords don't match, try again"
 
-    echo -n "Enter password: "
+    echo -n "Enter new password for $name: "
     read -s pass1
     echo
 
-    echo -n "Confirm password: "
+    echo -n "Confirm new password: "
     read -s pass2
     echo
 	done ;
-}
-
-# Determines whether username $name exists or not
-user_dne() {
-  (! (id -u "$name" &>/dev/null)) || { echo "User \"$name\" already exists!"; return 1; }
-}
-
-# Add a user and password to the system, add it to the wheel group, and create
-# its home directory
-set_user_and_passwd() {
-  # this function must be ran as root
-  [ "$EUID" = 0 ] || { echo "You must be root to set a new user and password!"; return 1; }
 
   # Add a new user with a home directory and set their shell to zsh
   useradd -m -s /bin/zsh "$name" &>/dev/null
@@ -256,7 +263,10 @@ setup_zsh() {
 # ===== The actual script starts here =====
 #
 
-get_user_and_passwd && user_dne && set_user_and_passwd || { echo "Failed adding new user. Exiting"; return; }
+# This script must be ran as root
+[ "$EUID" = 0 ] || { echo "You must be root to run this script"; return; }
+
+handle_user_and_passwd  || { echo "Failed to create new user. Exiting"; return; }
 
 upd_pacman_conf
 
