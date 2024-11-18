@@ -3,7 +3,7 @@
 DOTFILES="https://github.com/llGaetanll/rice.git"
 BRANCH="master"
 
-PROGS="https://raw.githubusercontent.com/llGaetanll/autorice/refs/heads/rewrite/progs.tsv"
+PROGS="https://raw.githubusercontent.com/llGaetanll/autorice/refs/heads/master/progs.tsv"
 
 # The max number of parallel downloads to set pacman/paru to
 NUM_PARALLEL=20
