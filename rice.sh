@@ -212,7 +212,7 @@ install_progs() {
   progs="$(awk 'NR > 1 { printf "%s ", $1 }' /tmp/progs.tsv)"
 
   # Install the programs in parallel
-  paru --needed -S $progs 2> err.log ;
+  sudo -u "$name" paru --needed -S $progs 2> err.log ;
 }
 
 install_dotfiles() {
