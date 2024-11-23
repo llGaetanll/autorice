@@ -244,6 +244,26 @@ install_dotfiles() {
 	sudo -u "$name" cp -rfT "$dir" "$1"
 }
 
+# dmenu is used by a lot of the system
+install_dmenu() {
+  echo "Installing dmenu"
+
+  local suckless_home="/tmp/suckless"
+
+  # Remove any existing installation
+  rm -rf "$suckless_home"
+
+  sudo -u "$name" git clone https://github.com/llGaetanll/suckless "$suckless_home"
+
+  chown -R "$name":wheel "$suckless_home"
+
+  cd "$suckless_home/dmenu" || exit
+
+  make install
+
+  cd - >/dev/null
+}
+
 remove_beep() {
   if lsmod | grep -q pcspkr; then
     rmmod pcspkr
@@ -288,6 +308,8 @@ install_paru || { echo "Failed to install paru. Exiting"; return; }
 install_progs
 
 install_dotfiles "/home/$name"
+
+install_dmenu
 
 remove_beep
 
