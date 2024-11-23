@@ -25,11 +25,11 @@ elogind-runit	runit service scripts for elogind
 exfat-utils	Utilities for exFAT file system
 ffmpeg	Complete solution to record, convert and stream audio and video
 firefox	Fast, Private & Safe Web Browser
-fwupd	Simple daemon to allow session software to update firmware
 geckodriver	Proxy for using W3C WebDriver-compatible clients to interact with Gecko-based browsers.
 git	the fast distributed version control system
 gnome-keyring	Stores passwords and encryption keys
 grub	GNU GRand Unified Bootloader (2)
+imagemagick	An image viewing/manipulation program
 intel-ucode	Microcode update files for Intel CPUs
 jq	Command-line JSON processor
 kmon	Linux kernel manager and activity monitor
@@ -66,6 +66,7 @@ prettierd	prettier, as a daemon, for ludicrous formatting speed.
 pulseaudio-alsa	ALSA Configuration for PulseAudio
 pulseaudio-bluetooth	Bluetooth support for PulseAudio
 pulsemixer	CLI and curses mixer for pulseaudio
+python-pywal	Generate and change colorschemes on the fly
 racket-minimal	Minimal Racket installation, without DrRacket/docs
 ripgrep	A search tool that combines the usability of ag with the raw speed of grep
 rsync	A fast and versatile file copying tool for remote and local files
@@ -75,7 +76,7 @@ rustup	The Rust toolchain installer
 sc-im	A spreadsheet program based on SC
 signal-desktop	Signal Private Messenger for Linux
 sof-firmware	Sound Open Firmware
-stylua	Code formatter for Lua
+stylua	Deterministic code formatter for Lua
 sxhkd	Simple X hotkey daemon
 sxiv-git	Simple (or small or suckless) X Image Viewer
 tcpdump	Powerful command-line packet analyzer
