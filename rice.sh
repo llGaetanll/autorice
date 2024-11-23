@@ -21,6 +21,7 @@ zsh"
 
 # Files that git should ignore in its index after installing the dotfiles
 GIT_INDEX_IGNORE="README.md
+install.sh
 .config/Xresources
 .config/xinitrc
 .config/polybar/modules.ini"
