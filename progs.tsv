@@ -80,20 +80,6 @@ stylua	Deterministic code formatter for Lua
 sxhkd	Simple X hotkey daemon
 sxiv-git	Simple (or small or suckless) X Image Viewer
 tcpdump	Powerful command-line packet analyzer
-texlive-basic	TeX Live - Essential programs and files
-texlive-bibtexextra	TeX Live - BibTeX additional styles
-texlive-binextra	TeX Live - TeX auxiliary programs
-texlive-fontsextra	TeX Live - Additional fonts
-texlive-formatsextra	TeX Live - Additional formats
-texlive-games	TeX Live - Games typesetting
-texlive-humanities	TeX Live - Humanities packages
-texlive-latexextra	TeX Live - LaTeX additional packages
-texlive-latexindent-meta	Meta package to use latexindent
-texlive-mathscience	TeX Live - Mathematics, natural sciences, computer science packages
-texlive-music	TeX Live - Music packages
-texlive-pictures	TeX Live - Graphics, pictures, diagrams
-texlive-pstricks	TeX Live - PSTricks
-texlive-publishers	TeX Live - Publisher styles, theses, etc.
 thermald	The Linux Thermal Daemon program from 01.org
 tmux	Terminal multiplexer
 transmission-cli	Fast, easy, and free BitTorrent client (CLI tools, daemon and web client)
